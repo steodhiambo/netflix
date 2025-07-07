@@ -1,0 +1,62 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Services List
+{% endblock %}
+{% block content %}
+    <p class="title">Services</p>
+
+    {% if user.is_company %}
+        <a class="create_service" href="/services/create"> Create Service</a>
+    {% endif %}
+
+
+
+    <div class='services_list'>
+        {% if services %}
+            {% for service in services %}
+                <div class="service-item">
+                    <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
+                    <p><strong>Field:</strong> {{ service.field }}</p>
+                    <p><strong>Price:</strong> €{{ service.price_hour }}/hour</p>
+                    <p><strong>Company:</strong> <a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></p>
+                    <p><strong>Created:</strong> {{ service.date|date:"M d, Y" }}</p>
+                    {% if service.rating > 0 %}
+                        <p><strong>Rating:</strong>
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= service.rating %}
+                                    ⭐
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                            ({{ service.rating }}/5)
+                        </p>
+                    {% endif %}
+                    <p>{{ service.description|truncatewords:20 }}</p>
+                    <div class="line"></div>
+                </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+                <div class="pagination">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1" class="page-link">« First</a>
+                        <a href="?page={{ page_obj.previous_page_number }}" class="page-link">‹ Previous</a>
+                    {% endif %}
+
+                    <span class="current-page">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next ›</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link">Last »</a>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% else %}
+            <h2>Sorry No services available yet</h2>
+        {% endif %}
+     </div>
+{% endblock %}

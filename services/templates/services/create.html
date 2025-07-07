@@ -1,0 +1,58 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Create Service
+{% endblock %}
+
+{% block content %}
+    <h2>Create New Service</h2>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div>
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div class="error_message">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div>
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {% if form.description.errors %}
+                <div class="error_message">{{ form.description.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div>
+            {{ form.price_hour.label_tag }}
+            {{ form.price_hour }}
+            {% if form.price_hour.errors %}
+                <div class="error_message">{{ form.price_hour.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div>
+            {{ form.field.label_tag }}
+            {{ form.field }}
+            {% if form.field.errors %}
+                <div class="error_message">{{ form.field.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <button type="submit">Create Service</button>
+    </form>
+    
+    <p style="margin-top: 20px;">
+        <a href="/services/">Back to Services</a>
+    </p>
+{% endblock %}
