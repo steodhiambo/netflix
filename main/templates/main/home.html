@@ -1,0 +1,46 @@
+{% extends 'main/base.html' %}
+    {% block title %}
+        NetFix
+    {% endblock %}
+
+{% block content %}
+    <div style="margin-top: 50px;">
+        <p class="site_title">NetFix</p>
+        <img class="home_logo" src="static/css/logo.png" alt="logo">
+        <p style="text-align: center; font-size: 18px; margin-top: 30px;">
+            Your one-stop solution for all home services
+        </p>
+    </div>
+
+    {% if top_services %}
+        <div style="margin-top: 50px;">
+            <h2 style="text-align: center;">Most Popular Services</h2>
+            <div class="top-services">
+                {% for service in top_services %}
+                    <div class="service-card">
+                        <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
+                        <p><strong>{{ service.field }}</strong></p>
+                        <p>€{{ service.price_hour }}/hour</p>
+                        <p>by <a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></p>
+                        {% if service.request_count > 0 %}
+                            <p><small>{{ service.request_count }} request{{ service.request_count|pluralize }}</small></p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="/services/" class="button">View All Services</a>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if not user.is_authenticated %}
+        <div style="text-align: center; margin-top: 50px;">
+            <h3>Get Started Today!</h3>
+            <p>
+                <a href="/register/" class="button">Register as Customer</a>
+                <a href="/register/company/" class="button">Register as Company</a>
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}
