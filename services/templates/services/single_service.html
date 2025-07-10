@@ -7,8 +7,24 @@
         <h1>{{service.name}} -- {{service.price_hour}}€/hour</h1>
         <h5>by <a href="/company/{{service.company.user}}">{{service.company.user}}</a></h5>
     </div>
-    <h3>{{service.field}}</h3>
-    <p style="text-align: left;">{{service.description}}</p>
+    <div class="service-details">
+        <h3>{{service.field}}</h3>
+        <p><strong>Description:</strong> {{service.description}}</p>
+        <p><strong>Price per hour:</strong> €{{service.price_hour}}</p>
+        <p><strong>Service created:</strong> {{ service.date|date:"M d, Y" }}</p>
+        {% if service.rating > 0 %}
+            <p><strong>Rating:</strong>
+                {% for i in "12345" %}
+                    {% if forloop.counter <= service.rating %}
+                        ⭐
+                    {% else %}
+                        ☆
+                    {% endif %}
+                {% endfor %}
+                ({{ service.rating }}/5)
+            </p>
+        {% endif %}
+    </div>
     {% if request.user.is_customer %}
         <a href="/services/{{service.id}}/request_service/" class="like_button">Request Service</a>
     {% endif %}
