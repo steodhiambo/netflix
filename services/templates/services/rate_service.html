@@ -1,0 +1,90 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Rate Service
+{% endblock %}
+
+{% block content %}
+    <h2>Rate Your Service Experience</h2>
+    
+    <div style="margin-bottom: 30px; background: #555; padding: 20px; border-radius: 8px;">
+        <h3>Service Details:</h3>
+        <p><strong>Service:</strong> {{ service_request.service.name }}</p>
+        <p><strong>Company:</strong> {{ service_request.service.company.user.username }}</p>
+        <p><strong>Address:</strong> {{ service_request.address }}</p>
+        <p><strong>Service Time:</strong> {{ service_request.service_time }} hours</p>
+        <p><strong>Total Cost:</strong> €{{ service_request.price }}</p>
+        <p><strong>Request Date:</strong> {{ service_request.request_date|date:"M d, Y" }}</p>
+        {% if service_request.completion_date %}
+            <p><strong>Completed:</strong> {{ service_request.completion_date|date:"M d, Y" }}</p>
+        {% endif %}
+    </div>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <form method="POST">
+        {% csrf_token %}
+        
+        <div style="margin-bottom: 30px;">
+            <h3>How would you rate this service?</h3>
+            {{ form.rating }}
+            {% if form.rating.errors %}
+                <div class="error_message">{{ form.rating.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <div style="margin-bottom: 30px;">
+            <h3>Share your experience (optional):</h3>
+            {{ form.review }}
+            {% if form.review.errors %}
+                <div class="error_message">{{ form.review.errors }}</div>
+            {% endif %}
+        </div>
+        
+        <button type="submit">Submit Rating</button>
+        <a href="/customer/{{ request.user.username }}" style="margin-left: 20px;">Cancel</a>
+    </form>
+    
+    <style>
+        .rating-option {
+            margin: 10px 0;
+            padding: 10px;
+            background: #666;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .rating-option:hover {
+            background: #777;
+        }
+        
+        .rating-option input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .rating-option label {
+            cursor: pointer;
+            display: block;
+            color: #ddd;
+        }
+    </style>
+    
+    <script>
+        // Add styling to radio buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const radioInputs = document.querySelectorAll('input[type="radio"]');
+            radioInputs.forEach(function(input) {
+                const li = input.closest('li');
+                if (li) {
+                    li.className = 'rating-option';
+                }
+            });
+        });
+    </script>
+{% endblock %}

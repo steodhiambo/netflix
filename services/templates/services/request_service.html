@@ -1,0 +1,66 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Request Service
+{% endblock %}
+
+{% block content %}
+    <h2>Request Service: {{ service.name }}</h2>
+
+    <div style="margin-bottom: 30px;">
+        <h3>Service Details:</h3>
+        <p><strong>Name:</strong> {{ service.name }}</p>
+        <p><strong>Description:</strong> {{ service.description }}</p>
+        <p><strong>Field:</strong> {{ service.field }}</p>
+        <p><strong>Price per Hour:</strong> €{{ service.price_hour }}</p>
+        <p><strong>Company:</strong> {{ service.company.user.username }}</p>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div>
+            {{ form.address.label_tag }}
+            {{ form.address }}
+            {% if form.address.errors %}
+                <div class="error_message">{{ form.address.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div>
+            {{ form.service_time.label_tag }}
+            {{ form.service_time }}
+            {% if form.service_time.errors %}
+                <div class="error_message">{{ form.service_time.errors }}</div>
+            {% endif %}
+        </div>
+
+        <p><strong>Estimated Cost:</strong> €<span id="estimated-cost">{{ service.price_hour }}</span></p>
+
+        <button type="submit">Request Service</button>
+    </form>
+
+    <p style="margin-top: 20px;">
+        <a href="/services/{{ service.id }}">Back to Service</a>
+    </p>
+
+    <script>
+        // Calculate estimated cost dynamically
+        const serviceTimeInput = document.querySelector('input[name="service_time"]');
+        const estimatedCostSpan = document.getElementById('estimated-cost');
+        const pricePerHour = {{ service.price_hour }};
+
+        serviceTimeInput.addEventListener('input', function() {
+            const hours = parseFloat(this.value) || 0;
+            const totalCost = (hours * pricePerHour).toFixed(2);
+            estimatedCostSpan.textContent = totalCost;
+        });
+    </script>
+{% endblock %}

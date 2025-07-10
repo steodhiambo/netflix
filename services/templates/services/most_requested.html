@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    Most Requested Services
+{% endblock %}
+
+{% block content %}
+    <h2>Most Requested Services</h2>
+    
+    {% if services %}
+        <div class="services-list">
+            {% for service in services %}
+                <div class="service-item">
+                    <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
+                    <p><strong>Field:</strong> {{ service.field }}</p>
+                    <p><strong>Price:</strong> €{{ service.price_hour }}/hour</p>
+                    <p><strong>Company:</strong> <a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></p>
+                    <p><strong>Times Requested:</strong> {{ service.request_count }}</p>
+                    <p>{{ service.description|truncatewords:20 }}</p>
+                    <div class="line"></div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No services have been requested yet.</p>
+    {% endif %}
+    
+    <p style="margin-top: 20px;">
+        <a href="/services/">View All Services</a>
+    </p>
+{% endblock %}
