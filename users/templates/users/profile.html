@@ -1,0 +1,154 @@
+{% extends 'main/base.html' %}
+{% block title %}
+    User Profile
+{% endblock %}
+
+{% block content %}
+    {% if user.is_customer %}
+        <div style="display: ruby;">
+            <h1>{{ user.username }} ({{user_age}} y/o)</h1>
+            <p>{{ user.email }}</p>
+            <p style="float: right;">Customer</p>
+        </div>
+    {% else %}
+        <div style="display: ruby;">
+            <h1>{{ user.username }}</h1>
+            <p> {{ user.email }}</p>
+            <p style="float: right;">{{user.company.field}} Company</p>
+        </div>
+       {% endif %}
+    {% if 'customer' in request.path %}
+        <p class="title">Previous Requested Services</p>
+    {% else %}
+        <p class="title">Available Services</p>
+    {% endif %}
+    {% if user.is_customer %}
+        {% for service_request in sh %}
+            <div class="service-request-item">
+                <div class="request-header">
+                    <h3><a href="/services/{{service_request.service.id}}">{{service_request.service.name}}</a></h3>
+                    <span class="status-badge status-{{ service_request.status }}">{{ service_request.get_status_display }}</span>
+                </div>
+
+                <div class="request-details">
+                    <p><strong>Field:</strong> {{service_request.service.field}}</p>
+                    <p><strong>Address:</strong> {{service_request.address}}</p>
+                    <p><strong>Service Time:</strong> {{service_request.service_time}} hours</p>
+                    <p><strong>Total Cost:</strong> €{{service_request.price}}</p>
+                    <p><strong>Requested:</strong> {{ service_request.request_date|date:"M d, Y" }}</p>
+                    {% if service_request.completion_date %}
+                        <p><strong>Completed:</strong> {{ service_request.completion_date|date:"M d, Y" }}</p>
+                    {% endif %}
+                    <p><strong>Company:</strong> <a href="/company/{{service_request.service.company.user}}">{{service_request.service.company.user}}</a></p>
+                </div>
+
+                {% if service_request.rating %}
+                    <div class="rating-display">
+                        <p><strong>Your Rating:</strong>
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= service_request.rating %}
+                                    ⭐
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                            ({{ service_request.rating }}/5)
+                        </p>
+                        {% if service_request.review %}
+                            <p><strong>Your Review:</strong> "{{ service_request.review }}"</p>
+                        {% endif %}
+                    </div>
+                {% elif service_request.can_be_rated %}
+                    <div class="rating-action">
+                        <a href="/services/request/{{ service_request.id }}/rate/" class="rate-button">Rate This Service</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="line"></div>
+        {% endfor %}
+    {% else %}
+        <!-- Company Services -->
+        <div class="company-section">
+            <h2>Your Services</h2>
+            {% for service in services %}
+            <div class="list_services_profile">
+                <h3><a href="/services/{{service.id}}">{{service.name}}</a></h3>
+                <p><strong>Price:</strong> €{{service.price_hour}}/hour</p>
+                <p><strong>Field:</strong> {{service.field}}</p>
+                {% if service.rating > 0 %}
+                    <p><strong>Rating:</strong>
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= service.rating %}
+                                ⭐
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                        ({{ service.rating }}/5)
+                    </p>
+                {% endif %}
+                <p>{{service.description|truncatewords:15}}</p>
+                <div class="line"></div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Service Requests -->
+        {% if service_requests %}
+        <div class="requests-section">
+            <h2>Service Requests</h2>
+            {% for request in service_requests %}
+            <div class="service-request-item">
+                <div class="request-header">
+                    <h3>{{request.service.name}} - {{request.customer.user.username}}</h3>
+                    <span class="status-badge status-{{ request.status }}">{{ request.get_status_display }}</span>
+                </div>
+
+                <div class="request-details">
+                    <p><strong>Customer:</strong> {{request.customer.user.username}} ({{request.customer.user.email}})</p>
+                    <p><strong>Address:</strong> {{request.address}}</p>
+                    <p><strong>Service Time:</strong> {{request.service_time}} hours</p>
+                    <p><strong>Total Cost:</strong> €{{request.price}}</p>
+                    <p><strong>Requested:</strong> {{ request.request_date|date:"M d, Y" }}</p>
+                    {% if request.completion_date %}
+                        <p><strong>Completed:</strong> {{ request.completion_date|date:"M d, Y" }}</p>
+                    {% endif %}
+                </div>
+
+                {% if request.rating %}
+                    <div class="rating-display">
+                        <p><strong>Customer Rating:</strong>
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= request.rating %}
+                                    ⭐
+                                {% else %}
+                                    ☆
+                                {% endif %}
+                            {% endfor %}
+                            ({{ request.rating }}/5)
+                        </p>
+                        {% if request.review %}
+                            <p><strong>Customer Review:</strong> "{{ request.review }}"</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <!-- Status Update Form -->
+                <div class="status-update">
+                    <form method="POST" action="/services/request/{{ request.id }}/update-status/" style="display: inline;">
+                        {% csrf_token %}
+                        <select name="status" onchange="this.form.submit()">
+                            <option value="pending" {% if request.status == 'pending' %}selected{% endif %}>Pending</option>
+                            <option value="in_progress" {% if request.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                            <option value="completed" {% if request.status == 'completed' %}selected{% endif %}>Completed</option>
+                            <option value="cancelled" {% if request.status == 'cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+            <div class="line"></div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endif %}
+{% endblock %}
