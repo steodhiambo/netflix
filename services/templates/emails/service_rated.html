@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Service Rated - NetFix</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #ffc107; color: #333; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 20px; }
+        .details { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+        .btn { background: #ec2f00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+        .rating-display { text-align: center; font-size: 24px; margin: 15px 0; }
+        .stars { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⭐ Service Rated</h1>
+            <p>NetFix - Service Marketplace</p>
+        </div>
+        
+        <div class="content">
+            <h2>Hello {{ company.user.username }}!</h2>
+            <p>Great news! A customer has rated your service.</p>
+            
+            <div class="details">
+                <h3>⭐ Rating Details</h3>
+                <div class="rating-display">
+                    <div class="stars">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= service_request.rating %}⭐{% else %}☆{% endif %}
+                        {% endfor %}
+                    </div>
+                    <p><strong>{{ service_request.rating }} out of 5 stars</strong></p>
+                </div>
+                
+                {% if service_request.review %}
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 15px 0;">
+                    <h4>📝 Customer Review:</h4>
+                    <p><em>"{{ service_request.review }}"</em></p>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="details">
+                <h3>📋 Service Details</h3>
+                <p><strong>Service:</strong> {{ service.name }}</p>
+                <p><strong>Category:</strong> {{ service.field }}</p>
+                <p><strong>Customer:</strong> {{ customer.user.username }}</p>
+                <p><strong>Completion Date:</strong> {{ service_request.completion_date|date:"F d, Y" }}</p>
+                <p><strong>Service Cost:</strong> €{{ service_request.price }}</p>
+            </div>
+            
+            <div class="details">
+                <h3>📈 Impact on Your Business</h3>
+                <p>Customer ratings help:</p>
+                <ul>
+                    <li>Build trust with potential customers</li>
+                    <li>Improve your service visibility</li>
+                    <li>Showcase your quality of work</li>
+                    <li>Attract more service requests</li>
+                </ul>
+                {% if service_request.rating >= 4 %}
+                    <p>🎉 <strong>Excellent work!</strong> High ratings like this will help attract more customers to your services.</p>
+                {% elif service_request.rating >= 3 %}
+                    <p>👍 <strong>Good job!</strong> Keep up the quality work to maintain customer satisfaction.</p>
+                {% else %}
+                    <p>💪 <strong>Room for improvement!</strong> Consider the feedback to enhance your service quality.</p>
+                {% endif %}
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <p>View your profile and all ratings:</p>
+                <a href="http://127.0.0.1:8000/company/{{ company.user.username }}" class="btn">View My Profile</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Keep up the great work!</p>
+            <p>© 2025 NetFix - Service Marketplace Platform</p>
+        </div>
+    </div>
+</body>
+</html>

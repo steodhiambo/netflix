@@ -9,6 +9,12 @@ from users.models import Company, Customer, User
 
 from .models import Service, ServiceRequest
 from .forms import CreateNewService, RequestServiceForm, RateServiceForm
+from .email_utils import (
+    send_service_request_notification,
+    send_status_update_notification,
+    send_service_completion_notification,
+    send_rating_notification
+)
 
 
 def service_list(request):
@@ -111,7 +117,14 @@ def request_service(request, id):
                 address=form.cleaned_data['address'],
                 service_time=form.cleaned_data['service_time']
             )
-            messages.success(request, 'Service requested successfully!')
+
+            # Send email notifications
+            if send_service_request_notification(service_request):
+                messages.success(request, 'Service requested successfully! Email notifications have been sent.')
+            else:
+                messages.success(request, 'Service requested successfully!')
+                messages.warning(request, 'Email notifications could not be sent.')
+
             return redirect('index', id=service.id)
     else:
         form = RequestServiceForm()
@@ -140,7 +153,13 @@ def rate_service(request, request_id):
             service_request.rating = int(form.cleaned_data['rating'])
             service_request.review = form.cleaned_data['review']
             service_request.save()
-            messages.success(request, 'Thank you for rating this service!')
+
+            # Send rating notification to company
+            if send_rating_notification(service_request):
+                messages.success(request, 'Thank you for rating this service! The company has been notified.')
+            else:
+                messages.success(request, 'Thank you for rating this service!')
+
             return redirect('customer_profile', name=request.user.username)
     else:
         form = RateServiceForm()
@@ -162,11 +181,50 @@ def update_request_status(request, request_id):
     if request.method == 'POST':
         new_status = request.POST.get('status')
         if new_status in ['pending', 'in_progress', 'completed', 'cancelled']:
+            old_status = service_request.status
             service_request.status = new_status
             if new_status == 'completed':
                 from django.utils import timezone
                 service_request.completion_date = timezone.now()
             service_request.save()
-            messages.success(request, f'Request status updated to {new_status}.')
+
+            # Send status update notification
+            if send_status_update_notification(service_request, old_status, new_status):
+                messages.success(request, f'Request status updated to {new_status}. Customer has been notified.')
+            else:
+                messages.success(request, f'Request status updated to {new_status}.')
+
+            # Send completion notification if completed
+            if new_status == 'completed':
+                send_service_completion_notification(service_request)
 
     return redirect('company_profile', name=request.user.username)
+
+
+def search_services(request):
+    """Search services by name, description, or category"""
+    query = request.GET.get('q', '').strip()
+    services = Service.objects.all().order_by("-date")
+
+    if query:
+        services = services.filter(
+            Q(name__icontains=query) |
+            Q(description__icontains=query) |
+            Q(field__icontains=query) |
+            Q(company__user__username__icontains=query)
+        ).distinct()
+
+    # Pagination
+    paginator = Paginator(services, 8)  # Show 8 services per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'services': page_obj,
+        'query': query,
+        'is_paginated': page_obj.has_other_pages(),
+        'page_obj': page_obj,
+        'total_results': services.count()
+    }
+
+    return render(request, 'services/search_results.html', context)
