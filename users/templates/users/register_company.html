@@ -1,13 +1,430 @@
-{% extends 'main/base.html' %} 
+{% extends 'main/base.html' %}
 {% block title %}
-  Company Registration
-{%endblock %}
+  Company Registration - NetFix
+{% endblock %}
 
 {% block content %}
-    <form method="POST">
-        {% csrf_token %}
-        {{form}}
-        <span class="helptext">Choose Field Above</span>
-        <button type="submit" name="register">Register</button>
-    </form>
+    <div class="registration-form-container">
+        <div class="form-header">
+            <div class="back-link">
+                <a href="/register/" class="btn-back">← Back to Account Type</a>
+            </div>
+            <div class="form-title-section">
+                <div class="form-icon company-icon">
+                    🏢
+                </div>
+                <h1 class="form-title">Create Company Account</h1>
+                <p class="form-subtitle">Join our network of trusted service providers</p>
+            </div>
+        </div>
+
+        <div class="form-card">
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <h4>Please correct the following errors:</h4>
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <form method="POST" class="registration-form">
+                {% csrf_token %}
+
+                <div class="form-section">
+                    <h3 class="section-title">Company Information</h3>
+
+                    <div class="form-group">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">
+                            <span class="label-icon">🏢</span>
+                            Company Name
+                            <span class="required">*</span>
+                        </label>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="field-error">{{ form.username.errors.0 }}</div>
+                        {% endif %}
+                        <div class="field-help">This will be your company's display name on NetFix</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">
+                            <span class="label-icon">📧</span>
+                            Business Email
+                            <span class="required">*</span>
+                        </label>
+                        {{ form.email }}
+                        {% if form.email.errors %}
+                            <div class="field-error">{{ form.email.errors.0 }}</div>
+                        {% endif %}
+                        <div class="field-help">Professional email for business communications</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.field.id_for_label }}" class="form-label">
+                            <span class="label-icon">🔧</span>
+                            Field of Work
+                            <span class="required">*</span>
+                        </label>
+                        {{ form.field }}
+                        {% if form.field.errors %}
+                            <div class="field-error">{{ form.field.errors.0 }}</div>
+                        {% endif %}
+                        <div class="field-help">
+                            Choose your primary service category.
+                            <strong>Note:</strong> "All in One" companies can offer services in any category.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3 class="section-title">Account Security</h3>
+
+                    <div class="form-group">
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">
+                            <span class="label-icon">🔒</span>
+                            Password
+                            <span class="required">*</span>
+                        </label>
+                        {{ form.password1 }}
+                        {% if form.password1.errors %}
+                            <div class="field-error">{{ form.password1.errors.0 }}</div>
+                        {% endif %}
+                        <div class="field-help">Choose a strong password with at least 8 characters</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">
+                            <span class="label-icon">🔒</span>
+                            Confirm Password
+                            <span class="required">*</span>
+                        </label>
+                        {{ form.password2 }}
+                        {% if form.password2.errors %}
+                            <div class="field-error">{{ form.password2.errors.0 }}</div>
+                        {% endif %}
+                        <div class="field-help">Re-enter your password to confirm</div>
+                    </div>
+                </div>
+
+                <div class="service-categories-info">
+                    <h4>📋 Available Service Categories</h4>
+                    <div class="categories-grid">
+                        <div class="category-item">❄️ Air Conditioner</div>
+                        <div class="category-item">🔧 All in One</div>
+                        <div class="category-item">🔨 Carpentry</div>
+                        <div class="category-item">⚡ Electricity</div>
+                        <div class="category-item">🌱 Gardening</div>
+                        <div class="category-item">🏠 Home Machines</div>
+                        <div class="category-item">🧹 Housekeeping</div>
+                        <div class="category-item">🎨 Interior Design</div>
+                        <div class="category-item">🔐 Locks</div>
+                        <div class="category-item">🎨 Painting</div>
+                        <div class="category-item">🔧 Plumbing</div>
+                        <div class="category-item">🚿 Water Heaters</div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-submit company-submit">
+                        <span class="btn-icon">🚀</span>
+                        Create Company Account
+                    </button>
+                    <p class="terms-text">
+                        By creating an account, you agree to our
+                        <a href="#" class="terms-link">Terms of Service</a>,
+                        <a href="#" class="terms-link">Privacy Policy</a>, and
+                        <a href="#" class="terms-link">Service Provider Agreement</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <div class="login-prompt">
+            <p>Already have an account? <a href="/login/" class="login-link">Sign in here</a></p>
+        </div>
+    </div>
+
+    <style>
+        .registration-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .back-link {
+            margin-bottom: 20px;
+        }
+
+        .btn-back {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            color: var(--primary-color);
+        }
+
+        .form-title-section {
+            text-align: center;
+        }
+
+        .form-icon.company-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 20px auto;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--text-light);
+        }
+
+        .form-title {
+            color: var(--accent-color);
+            font-size: 28px;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+
+        .form-subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin: 0;
+        }
+
+        .form-card {
+            background: var(--secondary-light);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(47, 79, 79, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .registration-form {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .form-section {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 30px;
+        }
+
+        .form-section:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .section-title {
+            color: var(--accent-color);
+            font-size: 20px;
+            font-weight: 600;
+            margin: 0 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+            display: inline-block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            color: var(--text-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .label-icon {
+            margin-right: 8px;
+            font-size: 16px;
+        }
+
+        .required {
+            color: var(--danger-color);
+            margin-left: 4px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            background: var(--secondary-light);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+        }
+
+        .field-error {
+            color: var(--danger-color);
+            font-size: 12px;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        .field-help {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .service-categories-info {
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .service-categories-info h4 {
+            color: var(--accent-color);
+            margin: 0 0 15px 0;
+            font-size: 16px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+        }
+
+        .category-item {
+            background: var(--secondary-light);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-submit.company-submit {
+            background: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            padding: 16px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+        }
+
+        .btn-submit.company-submit:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(210, 105, 30, 0.3);
+        }
+
+        .btn-icon {
+            margin-right: 8px;
+        }
+
+        .terms-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .terms-link {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .terms-link:hover {
+            text-decoration: underline;
+        }
+
+        .login-prompt {
+            text-align: center;
+            padding: 20px;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .login-link {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid;
+        }
+
+        .alert-danger {
+            background: rgba(220, 53, 69, 0.1);
+            border-left-color: var(--danger-color);
+            color: #721c24;
+        }
+
+        .alert h4 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+
+        .alert ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .registration-form-container {
+                padding: 15px;
+            }
+
+            .form-card {
+                padding: 25px 20px;
+            }
+
+            .form-title {
+                font-size: 24px;
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+    </style>
 {% endblock %}
