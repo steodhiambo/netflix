@@ -3,37 +3,68 @@
     Services List
 {% endblock %}
 {% block content %}
-    <p class="title">Services</p>
+    <div class="page-header text-center mb-4">
+        <h1 class="title">🛠️ All Services</h1>
+        <p style="color: var(--text-secondary); font-size: 16px;">
+            Discover professional services for all your home needs
+        </p>
 
-    {% if user.is_company %}
-        <a class="create_service" href="/services/create"> Create Service</a>
-    {% endif %}
+        {% if user.is_company %}
+            <div class="mt-3">
+                <a class="create_service" href="/services/create">
+                    ➕ Create New Service
+                </a>
+            </div>
+        {% endif %}
+    </div>
 
 
 
-    <div class='services_list'>
+    <div class="services-grid">
         {% if services %}
             {% for service in services %}
-                <div class="service-item">
-                    <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
-                    <p><strong>Field:</strong> {{ service.field }}</p>
-                    <p><strong>Price:</strong> €{{ service.price_hour }}/hour</p>
-                    <p><strong>Company:</strong> <a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></p>
-                    <p><strong>Created:</strong> {{ service.date|date:"M d, Y" }}</p>
-                    {% if service.rating > 0 %}
-                        <p><strong>Rating:</strong>
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= service.rating %}
-                                    ⭐
+                <div class="service-card">
+                    <div class="service-header">
+                        <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
+                        <span class="badge badge-primary">{{ service.field }}</span>
+                    </div>
+
+                    <div class="service-content">
+                        <p class="service-description">{{ service.description|truncatewords:15 }}</p>
+
+                        <div class="service-details">
+                            <div class="service-price">
+                                <strong style="color: var(--primary-color); font-size: 18px;">€{{ service.price_hour }}/hour</strong>
+                            </div>
+                            <div class="service-rating">
+                                {% if service.rating > 0 %}
+                                    <span class="stars">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= service.rating %}⭐{% else %}☆{% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    <span class="rating-text">({{ service.rating }}/5)</span>
                                 {% else %}
-                                    ☆
+                                    <span class="no-rating">No ratings yet</span>
                                 {% endif %}
-                            {% endfor %}
-                            ({{ service.rating }}/5)
-                        </p>
-                    {% endif %}
-                    <p>{{ service.description|truncatewords:20 }}</p>
-                    <div class="line"></div>
+                            </div>
+                        </div>
+
+                        <div class="service-company">
+                            <small>By: <a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></small>
+                        </div>
+
+                        <div class="service-date">
+                            <small>Created: {{ service.date|date:"M d, Y" }}</small>
+                        </div>
+                    </div>
+
+                    <div class="service-actions">
+                        <a href="/services/{{ service.id }}" class="button" style="font-size: 14px; padding: 10px 20px;">View Details</a>
+                        {% if user.is_authenticated and user.is_customer %}
+                            <a href="/services/{{ service.id }}/request_service/" class="button" style="background: var(--success-color); font-size: 14px; padding: 10px 20px;">Request Service</a>
+                        {% endif %}
+                    </div>
                 </div>
             {% endfor %}
 
@@ -56,7 +87,122 @@
                 </div>
             {% endif %}
         {% else %}
-            <h2>Sorry No services available yet</h2>
+            <div class="no-services text-center mt-4">
+                <div style="font-size: 64px; margin-bottom: 20px;">🔧</div>
+                <h3>No services available yet</h3>
+                <p style="color: var(--text-secondary);">Be the first to add a service to our marketplace!</p>
+                {% if user.is_company %}
+                    <a href="/services/create/" class="button mt-3">Create First Service</a>
+                {% endif %}
+            </div>
         {% endif %}
-     </div>
+    </div>
+
+    <style>
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 24px;
+            margin: 30px 0;
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .service-header h3 {
+            margin: 0;
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .service-content {
+            margin-bottom: 20px;
+        }
+
+        .service-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .service-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+            padding: 12px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .service-rating {
+            text-align: right;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 14px;
+        }
+
+        .rating-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-left: 5px;
+        }
+
+        .no-rating {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .service-company, .service-date {
+            margin: 8px 0;
+        }
+
+        .service-company a {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .service-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .service-actions .button {
+            flex: 1;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .no-services {
+            padding: 60px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .service-details {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .service-rating {
+                text-align: left;
+            }
+
+            .service-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
 {% endblock %}

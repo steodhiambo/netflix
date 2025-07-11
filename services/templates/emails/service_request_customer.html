@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Service Request Confirmation - NetFix</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #28a745; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 20px; }
+        .details { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+        .btn { background: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Service Request Confirmed</h1>
+            <p>NetFix - Service Marketplace</p>
+        </div>
+        
+        <div class="content">
+            <h2>Hello {{ customer.user.username }}!</h2>
+            <p>Your service request has been successfully submitted and sent to the service provider.</p>
+            
+            <div class="details">
+                <h3>📋 Your Request Details</h3>
+                <p><strong>Service:</strong> {{ service.name }}</p>
+                <p><strong>Category:</strong> {{ service.field }}</p>
+                <p><strong>Service Address:</strong> {{ service_request.address }}</p>
+                <p><strong>Estimated Time:</strong> {{ service_request.service_time }} hour{{ service_request.service_time|pluralize }}</p>
+                <p><strong>Total Cost:</strong> €{{ service_request.price }}</p>
+                <p><strong>Request Date:</strong> {{ service_request.request_date|date:"F d, Y at g:i A" }}</p>
+            </div>
+            
+            <div class="details">
+                <h3>🏢 Service Provider</h3>
+                <p><strong>Company:</strong> {{ company.user.username }}</p>
+                <p><strong>Field:</strong> {{ company.field }}</p>
+                <p><strong>Contact:</strong> {{ company.user.email }}</p>
+            </div>
+            
+            <div class="details">
+                <h3>📞 What's Next?</h3>
+                <p>The service provider has been notified of your request and will contact you soon to:</p>
+                <ul>
+                    <li>Confirm the service details</li>
+                    <li>Schedule the service appointment</li>
+                    <li>Provide any additional information needed</li>
+                </ul>
+                <p><strong>Current Status:</strong> {{ service_request.get_status_display }}</p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <p>You can track your request status in your profile:</p>
+                <a href="http://127.0.0.1:8000/customer/{{ customer.user.username }}" class="btn">View My Requests</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Thank you for using NetFix!</p>
+            <p>© 2025 NetFix - Service Marketplace Platform</p>
+        </div>
+    </div>
+</body>
+</html>

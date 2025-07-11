@@ -1,36 +1,51 @@
 <nav class="navbar">
     <ul>
-        <li><a href="/">Home</a></li>
-        <li>
-            <a href="/services/">Services</a>
-            <ul>
-                <li><a href="/services/most-requested/">Most Requested</a></li>
-                <li><a href="/services/air-conditioner">Air Conditioner</a></li>
-                <li><a href="/services/carpentry">Carpentry</a></li>
-                <li><a href="/services/electricity">Electricity</a></li>
-                <li><a href="/services/gardening">Gardening</a></li>
-                <li><a href="/services/home-machines">Home Machines</a></li>
-                <li><a href="/services/housekeeping">Housekeeping</a></li>
-                <li><a href="/services/interior-design">Interior Design</a></li>
-                <li><a href="/services/locks">Locks</a></li>
-                <li><a href="/services/painting">Painting</a></li>
-                <li><a href="/services/plumbing">Plumbing</a></li>
-                <li><a href="/services/water-heaters">Water Heaters</a></li>
-            </ul>
-        </li>
+        <!-- Left side navigation -->
+        <div class="navbar-left">
+            <li><a href="/">Home</a></li>
+            <li>
+                <a href="/services/">All Services</a>
+                <ul class="services-dropdown">
+                    <li><a href="/services/most-requested/">🔥 Most Requested</a></li>
+                    <li class="dropdown-divider"></li>
+                    <li><a href="/services/air-conditioner">❄️ Air Conditioner</a></li>
+                    <li><a href="/services/carpentry">🔨 Carpentry</a></li>
+                    <li><a href="/services/electricity">⚡ Electricity</a></li>
+                    <li><a href="/services/gardening">🌱 Gardening</a></li>
+                    <li><a href="/services/home-machines">🏠 Home Machines</a></li>
+                    <li><a href="/services/housekeeping">🧹 Housekeeping</a></li>
+                    <li><a href="/services/interior-design">🎨 Interior Design</a></li>
+                    <li><a href="/services/locks">🔐 Locks</a></li>
+                    <li><a href="/services/painting">🎨 Painting</a></li>
+                    <li><a href="/services/plumbing">🔧 Plumbing</a></li>
+                    <li><a href="/services/water-heaters">🚿 Water Heaters</a></li>
+                </ul>
+            </li>
+        </div>
 
-        {% if user.is_authenticated %}
-            {% if user.is_company %}
-                <li><a href="/services/create/">Create Service</a></li>
-                <li><a href="/company/{{ user.username }}">Profile</a></li>
+        <!-- Center search bar -->
+        <div class="search-container">
+            <form method="GET" action="/services/search/" class="search-form">
+                <input type="text" name="q" placeholder="Search services..." class="search-input" value="{{ request.GET.q }}">
+                <button type="submit" class="search-btn">🔍</button>
+            </form>
+        </div>
+
+        <!-- Right side navigation -->
+        <div class="navbar-right">
+            {% if user.is_authenticated %}
+                {% if user.is_company %}
+                    <li><a href="/services/create/" class="create-service-btn">➕ Create Service</a></li>
+                    <li><a href="/company/{{ user.username }}">👤 Profile</a></li>
+                {% else %}
+                    <li><a href="/customer/{{ user.username }}">👤 Profile</a></li>
+                {% endif %}
+                <li><a href="/logout/" class="logout-btn">🚪 Logout</a></li>
             {% else %}
-                <li><a href="/customer/{{ user.username }}">Profile</a></li>
+                <li><a href="/login/" class="login-btn">🔑 Login</a></li>
+                <li><a href="/register/" class="register-btn">📝 Register</a></li>
             {% endif %}
-            <li><a href="/logout/">Logout</a></li>
-        {% else %}
-            <li><a href="/login/">Login</a></li>
-            <li><a href="/register/">Register</a></li>
-        {% endif %}
+        </div>
     </ul>
 </nav>
 

@@ -1,28 +1,263 @@
-{% extends 'main/base.html' %} 
+{% extends 'main/base.html' %}
 {% block title %}
-  User Type
-{%endblock %}
+  Join NetFix - Choose Your Account Type
+{% endblock %}
 
-{%block content %}
-    <p class="choice_text">Choose wether you want to be a customer or a company</p>
-    
-    <div style="margin-top: 70px;">
-        <div style="margin-left: 50px" class="choice">
-            <div class="company img" id="company">
-                <a href="/register/company">
-                    <img src="/static/css/company.png" alt="company" >
-                </a>
-            </div>
-            <p class="label_images">Company</p>
+{% block content %}
+    <div class="registration-container">
+        <div class="registration-header">
+            <h1 class="title">🚀 Join NetFix</h1>
+            <p class="subtitle">Choose how you want to use our platform</p>
         </div>
 
-        <div style="float: right; margin-right: 50px;" class="choice">
-            <div class="img" id="customer">
-                <a href="/register/customer">
-                    <img src="/static/css/customer.png" alt="customer">
-                </a>
+        <div class="account-type-selection">
+            <div class="account-type-card customer-card">
+                <div class="card-icon">
+                    <div class="icon-circle customer-icon">
+                        👤
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>I'm a Customer</h3>
+                    <p>Looking for professional services for your home</p>
+                    <ul class="benefits-list">
+                        <li>🔍 Browse thousands of services</li>
+                        <li>⭐ Read reviews and ratings</li>
+                        <li>📱 Easy booking and communication</li>
+                        <li>💳 Secure payment processing</li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <a href="/register/customer/" class="btn-register customer-btn">
+                        Register as Customer
+                    </a>
+                </div>
             </div>
-            <p>Customer</p>
+
+            <div class="account-type-card company-card">
+                <div class="card-icon">
+                    <div class="icon-circle company-icon">
+                        🏢
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>I'm a Service Provider</h3>
+                    <p>Ready to offer your professional services</p>
+                    <ul class="benefits-list">
+                        <li>💼 Showcase your expertise</li>
+                        <li>📈 Grow your customer base</li>
+                        <li>💰 Set your own prices</li>
+                        <li>🎯 Get targeted service requests</li>
+                    </ul>
+                </div>
+                <div class="card-action">
+                    <a href="/register/company/" class="btn-register company-btn">
+                        Register as Company
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-prompt">
+            <p>Already have an account? <a href="/login/" class="login-link">Sign in here</a></p>
         </div>
     </div>
+
+    <style>
+        .registration-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .registration-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-top: 10px;
+        }
+
+        .account-type-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .account-type-card {
+            background: var(--secondary-light);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .account-type-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .customer-card::before {
+            background: linear-gradient(90deg, var(--accent-light), var(--accent-color));
+        }
+
+        .company-card::before {
+            background: linear-gradient(90deg, var(--primary-color), var(--primary-light));
+        }
+
+        .account-type-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(47, 79, 79, 0.15);
+        }
+
+        .customer-card:hover {
+            border-color: var(--accent-light);
+        }
+
+        .company-card:hover {
+            border-color: var(--primary-color);
+        }
+
+        .card-icon {
+            margin-bottom: 20px;
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto;
+            transition: all 0.3s ease;
+        }
+
+        .customer-icon {
+            background: linear-gradient(135deg, var(--accent-light), var(--accent-color));
+            color: var(--text-light);
+        }
+
+        .company-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: var(--text-light);
+        }
+
+        .account-type-card:hover .icon-circle {
+            transform: scale(1.1);
+        }
+
+        .card-content h3 {
+            color: var(--accent-color);
+            font-size: 24px;
+            margin: 20px 0 10px 0;
+            font-weight: 700;
+        }
+
+        .card-content p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .benefits-list li {
+            padding: 8px 0;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .card-action {
+            margin-top: 30px;
+        }
+
+        .btn-register {
+            display: inline-block;
+            padding: 16px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .customer-btn {
+            background: var(--accent-light);
+            color: var(--text-light);
+        }
+
+        .customer-btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(70, 130, 180, 0.3);
+        }
+
+        .company-btn {
+            background: var(--primary-color);
+            color: var(--text-light);
+        }
+
+        .company-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(210, 105, 30, 0.3);
+        }
+
+        .login-prompt {
+            text-align: center;
+            padding: 20px;
+            background: var(--secondary-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .login-link {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .account-type-selection {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .registration-container {
+                padding: 20px 15px;
+            }
+
+            .account-type-card {
+                padding: 25px 20px;
+            }
+        }
+    </style>
 {% endblock %}

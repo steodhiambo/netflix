@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Service Request Status Update - NetFix</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #007bff; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 20px; }
+        .details { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+        .btn { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+        .status-update { background: #e7f3ff; border-left: 4px solid #007bff; padding: 15px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Service Request Update</h1>
+            <p>NetFix - Service Marketplace</p>
+        </div>
+        
+        <div class="content">
+            <h2>Hello {{ customer.user.username }}!</h2>
+            <p>There's an update on your service request:</p>
+            
+            <div class="status-update">
+                <h3>🔄 Status Update</h3>
+                <p><strong>Previous Status:</strong> {{ old_status|title }}</p>
+                <p><strong>New Status:</strong> {{ new_status|title }}</p>
+                {% if new_status == 'in_progress' %}
+                    <p>🚀 Great news! Your service is now in progress.</p>
+                {% elif new_status == 'completed' %}
+                    <p>🎉 Excellent! Your service has been completed.</p>
+                {% elif new_status == 'cancelled' %}
+                    <p>❌ Unfortunately, your service request has been cancelled.</p>
+                {% endif %}
+            </div>
+            
+            <div class="details">
+                <h3>📋 Service Details</h3>
+                <p><strong>Service:</strong> {{ service.name }}</p>
+                <p><strong>Category:</strong> {{ service.field }}</p>
+                <p><strong>Address:</strong> {{ service_request.address }}</p>
+                <p><strong>Total Cost:</strong> €{{ service_request.price }}</p>
+                <p><strong>Provider:</strong> {{ company.user.username }}</p>
+            </div>
+            
+            {% if new_status == 'completed' %}
+            <div class="details">
+                <h3>⭐ Rate Your Experience</h3>
+                <p>Now that your service is complete, we'd love to hear about your experience!</p>
+                <p>Your feedback helps other customers and improves our service quality.</p>
+            </div>
+            {% endif %}
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <p>View full details in your profile:</p>
+                <a href="http://127.0.0.1:8000/customer/{{ customer.user.username }}" class="btn">View My Requests</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Thank you for using NetFix!</p>
+            <p>© 2025 NetFix - Service Marketplace Platform</p>
+        </div>
+    </div>
+</body>
+</html>

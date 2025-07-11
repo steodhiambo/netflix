@@ -4,43 +4,178 @@
     {% endblock %}
 
 {% block content %}
-    <div style="margin-top: 50px;">
-        <p class="site_title">NetFix</p>
-        <img class="home_logo" src="static/css/logo.png" alt="logo">
-        <p style="text-align: center; font-size: 18px; margin-top: 30px;">
-            Your one-stop solution for all home services
-        </p>
+    <!-- Hero Section -->
+    <div class="hero-section mt-4">
+        <div class="text-center">
+            <h1 class="site_title">NetFix</h1>
+            <img class="home_logo" src="static/css/logo.png" alt="NetFix Logo">
+            <p class="hero-subtitle">
+                🏠 Your one-stop solution for all home services
+            </p>
+            <p class="hero-description">
+                Connect with trusted professionals for plumbing, electrical work, cleaning, and more!
+            </p>
+        </div>
     </div>
 
+    <!-- Popular Services Section -->
     {% if top_services %}
-        <div style="margin-top: 50px;">
-            <h2 style="text-align: center;">Most Popular Services</h2>
+        <div class="popular-services-section mt-4">
+            <div class="text-center mb-3">
+                <h2 class="title">🔥 Most Popular Services</h2>
+                <p style="color: var(--text-secondary); font-size: 16px;">
+                    Discover the services our customers love most
+                </p>
+            </div>
             <div class="top-services">
                 {% for service in top_services %}
                     <div class="service-card">
-                        <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
-                        <p><strong>{{ service.field }}</strong></p>
-                        <p>€{{ service.price_hour }}/hour</p>
-                        <p>by <a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></p>
+                        <div class="service-header">
+                            <h3><a href="/services/{{ service.id }}">{{ service.name }}</a></h3>
+                            <span class="badge badge-primary">{{ service.field }}</span>
+                        </div>
+                        <div class="service-price">
+                            <strong style="color: var(--primary-color); font-size: 18px;">€{{ service.price_hour }}/hour</strong>
+                        </div>
+                        <div class="service-provider">
+                            <small>by <a href="/company/{{ service.company.user.username }}">{{ service.company.user.username }}</a></small>
+                        </div>
                         {% if service.request_count > 0 %}
-                            <p><small>{{ service.request_count }} request{{ service.request_count|pluralize }}</small></p>
+                            <div class="service-stats mt-2">
+                                <span class="badge badge-success">{{ service.request_count }} request{{ service.request_count|pluralize }}</span>
+                            </div>
                         {% endif %}
+                        <div class="service-actions mt-3">
+                            <a href="/services/{{ service.id }}" class="button" style="font-size: 14px; padding: 10px 20px;">View Details</a>
+                        </div>
                     </div>
                 {% endfor %}
             </div>
-            <div style="text-align: center; margin-top: 30px;">
-                <a href="/services/" class="button">View All Services</a>
+            <div class="text-center mt-4">
+                <a href="/services/" class="button">🔍 Browse All Services</a>
+                <a href="/services/most-requested/" class="button" style="background: var(--accent-color);">📊 Most Requested</a>
             </div>
         </div>
     {% endif %}
 
+    <!-- Call to Action Section -->
     {% if not user.is_authenticated %}
-        <div style="text-align: center; margin-top: 50px;">
-            <h3>Get Started Today!</h3>
-            <p>
-                <a href="/register/" class="button">Register as Customer</a>
-                <a href="/register/company/" class="button">Register as Company</a>
-            </p>
+        <div class="cta-section mt-4">
+            <div class="card text-center" style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); color: var(--text-light);">
+                <h3 style="color: var(--text-light); margin-bottom: 20px;">🚀 Get Started Today!</h3>
+                <p style="color: var(--text-light); margin-bottom: 30px; font-size: 16px;">
+                    Join thousands of satisfied customers and service providers
+                </p>
+                <div class="cta-buttons">
+                    <a href="/register/customer/" class="button" style="background: var(--text-light); color: var(--primary-color); margin: 0 10px;">
+                        👤 Register as Customer
+                    </a>
+                    <a href="/register/company/" class="button" style="background: var(--accent-color); color: var(--text-light); margin: 0 10px;">
+                        🏢 Register as Company
+                    </a>
+                </div>
+            </div>
         </div>
     {% endif %}
+
+    <!-- Features Section -->
+    <div class="features-section mt-4">
+        <div class="text-center mb-3">
+            <h2 class="title">✨ Why Choose NetFix?</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card card text-center">
+                <div class="feature-icon">🔧</div>
+                <h4>Professional Services</h4>
+                <p>Verified professionals across 11+ service categories</p>
+            </div>
+            <div class="feature-card card text-center">
+                <div class="feature-icon">⭐</div>
+                <h4>Rated & Reviewed</h4>
+                <p>Real customer reviews and ratings for quality assurance</p>
+            </div>
+            <div class="feature-card card text-center">
+                <div class="feature-icon">💬</div>
+                <h4>Easy Communication</h4>
+                <p>Direct contact with service providers and instant notifications</p>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .hero-section {
+            padding: 40px 0;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin: 20px 0;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .popular-services-section {
+            padding: 40px 0;
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .service-header h3 {
+            margin: 0;
+            flex: 1;
+        }
+
+        .cta-section {
+            padding: 40px 0;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .features-section {
+            padding: 40px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            padding: 30px 20px;
+        }
+
+        .feature-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h4 {
+            color: var(--accent-color);
+            margin: 15px 0;
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+    </style>
 {% endblock %}

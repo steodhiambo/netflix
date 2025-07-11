@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Service Completed - NetFix</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #28a745; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 20px; }
+        .details { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+        .btn { background: #ffc107; color: #333; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .completion-banner { background: #d4edda; border: 1px solid #c3e6cb; padding: 20px; border-radius: 5px; text-align: center; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎉 Service Completed!</h1>
+            <p>NetFix - Service Marketplace</p>
+        </div>
+        
+        <div class="content">
+            <h2>Congratulations {{ customer.user.username }}!</h2>
+            
+            <div class="completion-banner">
+                <h3>✅ Your service has been successfully completed!</h3>
+                <p>We hope you're satisfied with the quality of service provided.</p>
+            </div>
+            
+            <div class="details">
+                <h3>📋 Completed Service Details</h3>
+                <p><strong>Service:</strong> {{ service.name }}</p>
+                <p><strong>Category:</strong> {{ service.field }}</p>
+                <p><strong>Address:</strong> {{ service_request.address }}</p>
+                <p><strong>Duration:</strong> {{ service_request.service_time }} hour{{ service_request.service_time|pluralize }}</p>
+                <p><strong>Total Cost:</strong> €{{ service_request.price }}</p>
+                <p><strong>Completed Date:</strong> {{ service_request.completion_date|date:"F d, Y at g:i A" }}</p>
+            </div>
+            
+            <div class="details">
+                <h3>🏢 Service Provider</h3>
+                <p><strong>Company:</strong> {{ company.user.username }}</p>
+                <p><strong>Specialization:</strong> {{ company.field }}</p>
+            </div>
+            
+            <div class="details">
+                <h3>⭐ Rate Your Experience</h3>
+                <p>Your feedback is valuable to us and helps other customers make informed decisions.</p>
+                <p>Please take a moment to rate this service and share your experience:</p>
+                <ul>
+                    <li>How was the quality of work?</li>
+                    <li>Was the service provider professional?</li>
+                    <li>Would you recommend this service to others?</li>
+                </ul>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <p>Rate this service now:</p>
+                <a href="http://127.0.0.1:8000/services/request/{{ service_request.id }}/rate/" class="btn">⭐ Rate & Review Service</a>
+            </div>
+            
+            <div class="details">
+                <h3>🔄 Need Another Service?</h3>
+                <p>We're glad we could help! If you need any other services, feel free to browse our marketplace:</p>
+                <ul>
+                    <li>🔧 Plumbing & Water Heaters</li>
+                    <li>⚡ Electrical Services</li>
+                    <li>🧹 Housekeeping & Cleaning</li>
+                    <li>🌱 Gardening & Landscaping</li>
+                    <li>🎨 Painting & Interior Design</li>
+                    <li>And many more!</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Thank you for choosing NetFix!</p>
+            <p>© 2025 NetFix - Service Marketplace Platform</p>
+        </div>
+    </div>
+</body>
+</html>

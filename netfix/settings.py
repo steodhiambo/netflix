@@ -25,7 +25,7 @@ SECRET_KEY = '-4c+@3tup)%is6x+4s1(c39ozkx_4u21_c!k5i1)_szqpn+f_c'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 AUTH_USER_MODEL = 'users.User'
 
@@ -127,3 +127,15 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For development - prints emails to console
+EMAIL_HOST = 'smtp.gmail.com'  # Change this for production
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@gmail.com'  # Change this for production
+EMAIL_HOST_PASSWORD = 'your-app-password'  # Change this for production
+DEFAULT_FROM_EMAIL = 'NetFix <noreply@netfix.com>'
+
+# For production, you might want to use:
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

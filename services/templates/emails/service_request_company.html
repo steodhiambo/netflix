@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>New Service Request - NetFix</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #ec2f00; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 20px; }
+        .details { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .footer { text-align: center; padding: 20px; color: #666; }
+        .btn { background: #ec2f00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 New Service Request</h1>
+            <p>NetFix - Service Marketplace</p>
+        </div>
+        
+        <div class="content">
+            <h2>Hello {{ company.user.username }}!</h2>
+            <p>You have received a new service request for your service:</p>
+            
+            <div class="details">
+                <h3>📋 Service Details</h3>
+                <p><strong>Service:</strong> {{ service.name }}</p>
+                <p><strong>Category:</strong> {{ service.field }}</p>
+                <p><strong>Description:</strong> {{ service.description }}</p>
+                <p><strong>Price per Hour:</strong> €{{ service.price_hour }}</p>
+            </div>
+            
+            <div class="details">
+                <h3>👤 Customer Information</h3>
+                <p><strong>Customer:</strong> {{ customer.user.username }}</p>
+                <p><strong>Email:</strong> {{ customer.user.email }}</p>
+            </div>
+            
+            <div class="details">
+                <h3>📍 Request Details</h3>
+                <p><strong>Service Address:</strong> {{ service_request.address }}</p>
+                <p><strong>Estimated Time:</strong> {{ service_request.service_time }} hour{{ service_request.service_time|pluralize }}</p>
+                <p><strong>Total Estimated Cost:</strong> €{{ service_request.price }}</p>
+                <p><strong>Request Date:</strong> {{ service_request.request_date|date:"F d, Y at g:i A" }}</p>
+                <p><strong>Status:</strong> {{ service_request.get_status_display }}</p>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <p>You can manage this request by logging into your NetFix account:</p>
+                <a href="http://127.0.0.1:8000/company/{{ company.user.username }}" class="btn">View Request Details</a>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>This is an automated message from NetFix.</p>
+            <p>© 2025 NetFix - Service Marketplace Platform</p>
+        </div>
+    </div>
+</body>
+</html>
