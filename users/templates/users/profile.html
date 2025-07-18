@@ -4,6 +4,16 @@
 {% endblock %}
 
 {% block content %}
+    <style>
+        .rating-stars {
+            font-size: 16px;
+            letter-spacing: 60px;
+            margin: 0 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
     {% if user.is_customer %}
         <div style="display: ruby;">
             <h1>{{ user.username }} ({{user_age}} y/o)</h1>
@@ -45,13 +55,9 @@
                 {% if service_request.rating %}
                     <div class="rating-display">
                         <p><strong>Your Rating:</strong>
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= service_request.rating %}
-                                    ⭐
-                                {% else %}
-                                    ☆
-                                {% endif %}
-                            {% endfor %}
+                            <span class="rating-stars">
+                                {% for i in "12345" %}{% if forloop.counter <= service_request.rating %}⭐{% else %}☆{% endif %}{% endfor %}
+                            </span>
                             ({{ service_request.rating }}/5)
                         </p>
                         {% if service_request.review %}
@@ -75,15 +81,12 @@
                 <h3><a href="/services/{{service.id}}">{{service.name}}</a></h3>
                 <p><strong>Price:</strong> €{{service.price_hour}}/hour</p>
                 <p><strong>Field:</strong> {{service.field}}</p>
+                <p><strong>Created:</strong> {{ service.date}}</p>
                 {% if service.rating > 0 %}
                     <p><strong>Rating:</strong>
-                        {% for i in "12345" %}
-                            {% if forloop.counter <= service.rating %}
-                                ⭐
-                            {% else %}
-                                ☆
-                            {% endif %}
-                        {% endfor %}
+                        <span class="rating-stars">
+                            {% for i in "12345" %}{% if forloop.counter <= service.rating %}⭐{% else %}☆{% endif %}{% endfor %}
+                        </span>
                         ({{ service.rating }}/5)
                     </p>
                 {% endif %}
@@ -118,13 +121,9 @@
                 {% if request.rating %}
                     <div class="rating-display">
                         <p><strong>Customer Rating:</strong>
-                            {% for i in "12345" %}
-                                {% if forloop.counter <= request.rating %}
-                                    ⭐
-                                {% else %}
-                                    ☆
-                                {% endif %}
-                            {% endfor %}
+                            <span class="rating-stars">
+                                {% for i in "12345" %}{% if forloop.counter <= request.rating %}⭐{% else %}☆{% endif %}{% endfor %}
+                            </span>
                             ({{ request.rating }}/5)
                         </p>
                         {% if request.review %}
