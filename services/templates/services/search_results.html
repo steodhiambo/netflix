@@ -14,22 +14,6 @@
         {% endif %}
     </div>
 
-    <!-- Enhanced Search Form -->
-    <div class="search-form-container">
-        <form method="GET" action="{% url 'search_services' %}" class="enhanced-search-form">
-            <div class="search-input-group">
-                <input type="text" name="q" placeholder="Search by service name, description, category, or company..." 
-                       class="enhanced-search-input" value="{{ query }}" autofocus>
-                <button type="submit" class="enhanced-search-btn">
-                    🔍 Search
-                </button>
-            </div>
-            <div class="search-tips">
-                <small>💡 Try searching for: "plumbing", "electrical repair", "cleaning", or company names</small>
-            </div>
-        </form>
-    </div>
-
     {% if services %}
         <div class="services-grid">
             {% for service in services %}

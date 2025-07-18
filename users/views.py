@@ -44,18 +44,34 @@ def LoginUserView(request):
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
-            email = form.cleaned_data['email']
+            username_or_email = form.cleaned_data['email']  # Field name is still 'email' but accepts both
             password = form.cleaned_data['password']
-            try:
-                user = User.objects.get(email=email)
-                user = authenticate(request, username=user.username, password=password)
-                if user is not None:
-                    login(request, user)
-                    return redirect('/')
-                else:
-                    form.add_error(None, 'Invalid email or password.')
-            except User.DoesNotExist:
-                form.add_error(None, 'Invalid email or password.')
+            user = None
+
+            # First, try to authenticate directly with the input (in case it's a username)
+            user = authenticate(request, username=username_or_email, password=password)
+
+            # If that fails, try to find user by email and authenticate with their username
+            if user is None:
+                try:
+                    user_obj = User.objects.get(email=username_or_email)
+                    user = authenticate(request, username=user_obj.username, password=password)
+                except User.DoesNotExist:
+                    pass
+
+            # If still no user, try to find by username (case insensitive)
+            if user is None:
+                try:
+                    user_obj = User.objects.get(username__iexact=username_or_email)
+                    user = authenticate(request, username=user_obj.username, password=password)
+                except User.DoesNotExist:
+                    pass
+
+            if user is not None:
+                login(request, user)
+                return redirect('/')
+            else:
+                form.add_error(None, 'Invalid username/email or password.')
     else:
         form = UserLoginForm()
 

@@ -63,12 +63,17 @@ python3 manage.py createsuperuser
 python3 manage.py populate_db
 ```
 
-6. Run the development server:
+6. Activate the virtual environment:
+```bash
+source venv/bin/activate
+```
+
+7. Run the development server:
 ```bash
 python3 manage.py runserver
 ```
 
-7. Visit `http://127.0.0.1:8000` in your browser
+8. Visit `http://127.0.0.1:8000` in your browser
 
 ## Usage
 
@@ -127,8 +132,9 @@ netfix/
 
 ## Testing
 
-Run the included test script:
+Activate the virtual environment and run the included test script:
 ```bash
+source venv/bin/activate
 python3 test_functionality.py
 ```
 
@@ -141,10 +147,12 @@ Access the admin interface at `http://127.0.0.1:8000/admin/` to manage:
 ## Development Notes
 
 - Built with Django 3.1.14
+- Uses virtual environment (venv) for dependency management
 - Uses SQLite database (default)
-- Email-based authentication instead of username
-- Responsive design with custom CSS
+- Supports both username and email-based authentication
+- Responsive design with custom CSS and modern UI
 - Form validation for unique emails and usernames
+- Horizontal ratings display with enhanced styling
 
 ## Future Enhancements
 
