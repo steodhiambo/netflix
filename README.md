@@ -38,7 +38,7 @@ NetFix is a Django-based web application that connects customers with service pr
 ### Setup
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/steodhiambo/netflix.git
 cd netfix
 ```
 
